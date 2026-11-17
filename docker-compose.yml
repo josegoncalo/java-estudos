@@ -1,0 +1,49 @@
+
+services:
+
+  # Ambiente de desenvolvimento Java
+  java:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: java-dev
+
+    working_dir: /workspace
+
+    volumes:
+      - .:/workspace
+
+    command: sleep infinity
+
+    depends_on:
+      postgres-java:
+        condition: service_healthy
+
+  # Banco de dados PostgreSQL
+  postgres-java:
+    image: postgres:16
+
+    container_name: postgres-java
+
+    environment:
+      POSTGRES_DB: rh
+      POSTGRES_USER: javabasico
+      POSTGRES_PASSWORD: "123456"
+
+    ports:
+      - "5448:5432"
+
+    volumes:
+      - postgres_java_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U javabasico -d rh"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+    restart: unless-stopped
+
+volumes:
+  postgres_java_data:

@@ -1,0 +1,15 @@
+# Arquivos compilados
+bin/
+target/
+*.class
+
+# Arquivos do macOS
+.DS_Store
+
+# Configurações locais
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
